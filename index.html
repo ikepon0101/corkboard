@@ -85,8 +85,18 @@ body{
 	<img src="img/corkboard.jpg" class="img-responsive">
 </div><!-- corkboard -->
 
-<!-- javascript -->
+<!-- javascript library -->
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!-- javascript original -->
+<script type="text/javascript">
+$(function(){
+	$('#btn').click(function(){
+		$.get('/corkboard/registrationAction.php', { text: $('#txt').text(), country: 'jp' });
+	});
+});
+</script>
+
 </body>
 </html>
