@@ -93,7 +93,7 @@ body{
 <script type="text/javascript">
 $(function(){
 	$('#btn').click(function(){
-		$.get('/corkboard/registrationAction.php', { text: $('#txt').text(), country: 'jp' });
+		$.get('/corkboard/registrationAction.php', { text: $('#txt').val(), country: 'jp' });
 	});
 });
 </script>
