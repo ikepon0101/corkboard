@@ -1,18 +1,16 @@
 <?php
 try {
 	$pdo = new PDO("mysql:host=127.0.0.1;dbname=corkboard;charset=utf8", "root", "ikepon0101");
-	$stmt = $pdo->prepare("SELECT id, time, text, country FROM comments WHERE time > now() - INTERVAL 60 SECOND");
-	//$stmt->bindValue(':TEXT', $_REQUEST['text'], PDO::PARAM_STR);
-	//$stmt->bindValue(':COUNTRY', $_REQUEST['country'], PDO::PARAM_STR);
+	$stmt = $pdo->prepare("SELECT id, time, text, country FROM comments WHERE time > now() - INTERVAL 300 SECOND");
 	$stmt->execute();
 
-	$json = array();
+	$list = array();
 	while ($row = $stmt->fetch()) {
-		$array = array('id' => $row['id'], 'time' => $row['time'], 'text' => $row['text'], 'country' => $row['country']);
-		array_push($json, json_encode($array));
+		$item = array('id' => $row['id'], 'time' => $row['time'], 'text' => $row['text'], 'country' => $row['country']);
+		array_push($list, json_encode($item));
 	}
 
-	print json_encode($json);
+	print json_encode($list);
 
 } catch (Exception $e){
 	echo $e;
