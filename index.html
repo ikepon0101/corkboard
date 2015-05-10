@@ -11,7 +11,7 @@
 <meta name="robots" content="ALL">
 <title>corkboard</title>
 <link rel="stylesheet" type="text/css" media="all" href="">
-<link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="/corkboard/img/favicon.ico">
 <!-- <link rel="alternate" media="handheld" href=""> -->
 <!-- <link rel="alternate" media="only screen and (max-width: 640px)" href=""> -->
 <!-- <link rel="canonical" href=""> -->
@@ -27,8 +27,8 @@ body{
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	//background-image: url("img/garden.jpg");
-	background-image: url("img/glass.jpg");
+	//background-image: url("/corkboard/img/garden.jpg");
+	background-image: url("/corkboard/img/glass.jpg");
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
@@ -46,7 +46,7 @@ body{
 	margin: 20px;
 	//padding: 10px;
 	//border: solid 1px black;
-	//background-image: url("img/corkboard.jpg");
+	//background-image: url("/corkboard/img/corkboard.jpg");
 	//background-size: cover;
 	//background-repeat: no-repeat;
 }
@@ -82,7 +82,7 @@ body{
 </div><!-- controller -->
 
 <div class="corkboard">
-	<img src="img/corkboard.jpg" class="img-responsive">
+	<img src="/corkboard/img/corkboard.jpg" class="img-responsive">
 </div><!-- corkboard -->
 
 <!-- javascript library -->
@@ -93,7 +93,7 @@ body{
 <script type="text/javascript">
 $(function(){
 	$('#btn').click(function(){
-		$.get('/corkboard/registrationAction.php', { text: $('#txt').val(), country: 'jp' });
+		$.get('/corkboard/insertAction.php', { text: $('#txt').val(), country: 'jp' });
 	});
 });
 </script>
