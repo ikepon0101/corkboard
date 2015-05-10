@@ -7,7 +7,7 @@ try {
 	$list = array();
 	while ($row = $stmt->fetch()) {
 		$item = array('id' => $row['id'], 'time' => $row['time'], 'text' => $row['text'], 'country' => $row['country']);
-		array_push($list, json_encode($item));
+		array_push($list, $item);
 	}
 
 	print json_encode($list);
