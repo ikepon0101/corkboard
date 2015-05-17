@@ -10,7 +10,8 @@ try {
 		array_push($list, $item);
 	}
 
-	print json_encode($list);
+	header( 'Content-Type: text/javascript; charset=utf-8' );
+	print $_GET['callback'] . "(" . json_encode($list) . ")";
 
 } catch (Exception $e){
 	echo $e;

@@ -49,11 +49,22 @@ body{
 	//background-image: url("/corkboard/img/corkboard.jpg");
 	//background-size: cover;
 	//background-repeat: no-repeat;
+	position: relative;
 }
 .controller{
 	margin: 20px;
 	text-align: center;
 	//border: solid 1px black;
+}
+.comment{
+	position: absolute;
+	padding: 5px 15px;
+	background-color: rgba(210,210,250,1);
+	position: absolute;
+	display: inline-block;
+	font-size: 30px;
+	top: 50px;
+	left: 50px;
 }
 #txt{
 	min-width: 200px;
@@ -77,13 +88,15 @@ body{
 <div class="controller">
 <form class="form-inline">
 	<input type="text" id="txt" class="form-control" placeholder="write here...">
-	<button type="submit" id="btn" class="btn btn-default">comment</button>
+	<button type="button" id="btn" class="btn btn-default">comment</button>
 </form>
 </div><!-- controller -->
 
 <div class="corkboard">
 	<img src="/corkboard/img/corkboard.jpg" class="img-responsive">
 </div><!-- corkboard -->
+
+<button type="button" id="selBtn" name="aaa" value="aaa">aaaaa</button>
 
 <!-- javascript library -->
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
@@ -94,6 +107,12 @@ body{
 $(function(){
 	$('#btn').click(function(){
 		$.get('/corkboard/insertAction.php', { text: $('#txt').val(), country: 'jp' });
+	});
+
+	$('#selBtn').click(function(){
+		$.getJSON('/corkboard/selectAction.php?callback=?', function(data){
+			$('.corkboard').append('<div class="comment">' + data[0].text + '</div>');
+		});
 	});
 });
 </script>
