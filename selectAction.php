@@ -1,7 +1,7 @@
 <?php
 try {
 	$pdo = new PDO("mysql:host=127.0.0.1;dbname=corkboard;charset=utf8", "root", "ikepon0101");
-	$stmt = $pdo->prepare("SELECT id, time, text, country FROM comments WHERE time > now() - INTERVAL 300 SECOND ORDER BY id");
+	$stmt = $pdo->prepare("SELECT id, time, text, country FROM comments WHERE time > now() - INTERVAL 300 SECOND ORDER BY id LIMIT 10");
 	$stmt->execute();
 
 	$list = array();
