@@ -9,7 +9,7 @@
 <meta name="keywords" content="">
 <meta name="author" content="">
 <meta name="robots" content="ALL">
-<title>corkboard</title>
+<title>corkboard : コルクボード</title>
 <link rel="stylesheet" type="text/css" media="all" href="">
 <link rel="shortcut icon" type="image/x-icon" href="/corkboard/img/favicon.ico">
 <!-- <link rel="alternate" media="handheld" href=""> -->
@@ -35,6 +35,17 @@ body{
 	//background-size: 100% auto;
 	background-size: cover;
 }
+h1,h2,h3,h4,p,span,div{
+	font-family: "arial black";
+}
+h1{
+	margin: 0;
+	padding: 0;
+}
+p{
+	margin: 10px 0 0;
+	font-size: 18px;
+}
 .contents{
 	margin: 20px;
 	padding: 20px;
@@ -50,72 +61,129 @@ body{
 	//background-size: cover;
 	//background-repeat: no-repeat;
 	position: relative;
+	text-align: center;
 }
 .controller{
 	margin: 20px;
 	text-align: center;
-	//border: solid 1px black;
 }
 .comment{
-	position: absolute;
 	padding: 5px 15px;
-	//background-color: rgba(210,210,250,1);
-	background-image: url("/corkboard/img/paper_yellow.png");
+	background-image: url("/corkboard/img/paper_blue.png");
 	position: absolute;
 	display: inline-block;
-	font-size: 30px;
-	top: 50px;
-	left: 50px;
+	border-right: solid 3px rgba(100,100,100,0.5);
+	border-bottom: solid 3px rgba(100,100,100,0.5);
 }
 #txt{
 	min-width: 200px;
 	margin-bottom: 5px;
-	//display: inline-block;
 }
 #btn{
 	margin-bottom: 5px;
+}
+#corkboard_img{
+	width: 100%;
 }
 </style>
 </head>
 <body>
 <!-- サンプル -->
 <div class="contents">
-<h1>this is h1</h1>
-<h2>this is h2</h2>
-<h3>this is h3</h3>
-<p>this is p. this is p. this is p. this is p.</p>
+<h1>Free Cork Board</h1>
+<p>これは自由に書き込めるコルクボードです。内容はすぐに破棄されるのでお気を付けください。</p>
 </div><!-- contents -->
 
-<div class="controller">
-<form class="form-inline">
+<div class="controller form-inline">
 	<input type="text" id="txt" class="form-control" placeholder="write here...">
 	<button type="button" id="btn" class="btn btn-default">comment</button>
-</form>
 </div><!-- controller -->
 
 <div class="corkboard">
-	<img src="/corkboard/img/corkboard.png" class="img-responsive">
+	<img id="corkboard_img" src="/corkboard/img/corkboard.png">
 </div><!-- corkboard -->
-
-<button type="button" id="selBtn" name="aaa" value="aaa">aaaaa</button>
 
 <!-- javascript library -->
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
 <!-- javascript original -->
 <script type="text/javascript">
-$(function(){
-	$('#btn').click(function(){
-		$.get('/corkboard/insertAction.php', { text: $('#txt').val(), country: 'jp' });
+(function(global) {
+	"use strict;"
+
+	$('#btn').click(function() {
+		$.get('http://appblow.com/corkboard/insertAction.php', { text: $('#txt').val(), country: 'jp' });
 	});
 
-	$('#selBtn').click(function(){
-		$.getJSON('/corkboard/selectAction.php?callback=?', function(data){
-			$('.corkboard').append('<div class="comment">' + data[0].text + '</div>');
+	var lastCommentId = 0;
+	setInterval(function() {
+		$.getJSON('http://appblow.com/corkboard/selectAction.php?callback=?', function(data) {
+			// data = [1,2,3];
+			if (data.length == 0) {
+				return;
+			}
+
+			// バランス参考
+			// 280 : 190
+			// 1000 : 675
+			var boardWidth = $('.corkboard').width();
+			var boardHeight = $('.corkboard').height();
+
+			var fontSize = 30;
+			var frameWidth = 60;
+			var maxWidth = 600;
+			var rightBuffer = 450;
+			var bottomBuffer = 300;
+			if (boardWidth > 800) {
+				fontSize = 30;
+				frameWidth = 60;
+				maxWidth = 600;
+				rightBuffer = 300;
+				bottomBuffer = 150;
+			} else if (boardWidth > 500) {
+				fontSize = 20;
+				frameWidth = 40;
+				maxWidth = 400;
+				rightBuffer = 200;
+				bottomBuffer = 100;
+			} else {
+				fontSize = 15;
+				frameWidth = 20;
+				maxWidth = 200;
+				rightBuffer = 150;
+				bottomBuffer = 80;
+			}
+
+			for (var i = 0; i < data.length; i++) {
+				var currentCommentId = Number(data[i].id);
+				if (currentCommentId <= lastCommentId) {
+					continue;
+				}
+				lastCommentId = Number(data[i].id);
+				var randomTop = Math.floor((Math.random() * 10000) % (boardHeight - bottomBuffer));
+				var randomLeft = Math.floor((Math.random() * 10000) % (boardWidth - rightBuffer));
+
+				var commentDiv = $('<div class="comment">' + data[i].text + '</div>');
+				// var commentDiv = $('<div class="comment">' + boardWidth + ' : ' + boardHeight + '</div>');
+
+				$('.corkboard').append(commentDiv);
+				// commentDiv.text(commentDiv.width());
+				commentDiv.css('font-size', fontSize);
+				commentDiv.css('top', frameWidth + randomTop);
+				commentDiv.css('left', frameWidth + randomLeft);
+				commentDiv.hide();
+				// commentDiv.show('Slide');
+				// commentDiv.show('drop');
+				commentDiv.show('explode');
+				// commentDiv.show('Blind');
+				// commentDiv.show('clip');
+				// commentDiv.show();
+			}
 		});
-	});
-});
+	}, 1000);
+})((this || 0).self || global);
 </script>
 
 </body>
